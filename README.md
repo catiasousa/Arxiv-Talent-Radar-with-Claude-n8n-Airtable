@@ -1,8 +1,8 @@
-# arXiv Talent Radar — n8n + Claude + GitHub + Airtable
+# arXiv Talent Radar n8n + Claude + GitHub + Airtable
 
 ## What this project does, read this first
 
-This project builds an automated technical-sourcing system that runs every morning. It reads the daily [arXiv cs.LG](http://arxiv.org/rss/cs.LG) research feed, uses **Claude** to decide whether each paper's authors are a fit for a role you're hiring for, looks up the first author on **GitHub**, and saves qualified candidates into **Airtable** — each with a fit score and a personalized outreach line.
+This project builds an automated technical-sourcing system that runs every morning. It reads the daily [arXiv cs.LG](http://arxiv.org/rss/cs.LG) research feed, uses **Claude** to decide whether each paper's authors are a fit for a role you're hiring for, looks up the first author on **GitHub**, and saves qualified candidates into **Airtable**, each with a fit score and a personalized outreach line.
 
 After setup, the process is hands-off. Each morning, Airtable is pre-filled with fresh, relevance-ranked candidates ready for outreach.
 
@@ -39,15 +39,18 @@ Great engineers publish. New ML papers appear on arXiv every day, but manually r
 7. Qualified candidates are saved to Airtable.
 
 ## Repository structure
-
-\`\`\`
+```text
 workflow/
   arxiv-talent-radar.json
+.github/
+  workflows/
+    gitleaks.yml
 README.md
 PROMPT.md
+.gitleaks.toml
 .gitignore
 LICENSE
-\`\`\`
+```
 
 ## Airtable fields required by this workflow
 
