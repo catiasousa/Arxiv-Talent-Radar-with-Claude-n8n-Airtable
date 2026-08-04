@@ -1,0 +1,14 @@
+title = "Arxiv Talent Radar Gitleaks Config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Ignore obvious placeholders in docs/prompts"
+regexes = [
+  '''(YOUR_|<YOUR_|sk-your-key-here|api_key_here|replace_me)'''
+]
+paths = [
+  '''README\.md''',
+  '''PROMPT\.md'''
+]
