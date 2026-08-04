@@ -1,0 +1,160 @@
+{
+  "name": "arXiv Talent Radar",
+  "nodes": [
+    {
+      "id": "3462b6ca-ff7a-48f5-9403-c56a1d220ab0",
+      "name": "Sticky Note 3462b6ca",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [784, 64],
+      "parameters": {
+        "content": "⚠️ TEST MODE: \"Limit to 2 (Test)\" caps this run to 2 papers so only up to 2 records reach Airtable. Delete that node (or raise maxItems) for the daily production run.\n\nEdit the ROLE line inside \"Claude Relevance Check\" to match the exact role you are hiring for."
+      }
+    },
+    {
+      "id": "7cfe7a0b-29d3-4bc3-8ad9-60938bd1ac27",
+      "name": "arXiv cs.LG Feed",
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {
+        "feedUrl": "http://arxiv.org/rss/cs.LG",
+        "pollTimes": { "item": [{ "mode": "everyDay", "hour": 6, "minute": 0 }] }
+      }
+    },
+    {
+      "id": "3b2f051a-bf70-4061-b4e0-6a56c66f5f65",
+      "name": "Limit to 2 (Test)",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [224, 0],
+      "parameters": { "maxItems": 2, "keep": "firstItems" }
+    },
+    {
+      "id": "3964fa9c-1de7-4112-a77f-498d08842ea1",
+      "name": "Claude Relevance Check",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [448, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 400,\n  \"system\": \"You are a technical recruiting assistant. Read arXiv paper titles and abstracts and decide if the authors would be relevant candidates for a specific engineering role. Be strict — only say relevant=true if the paper is directly relevant. Return only valid JSON with no extra text.\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\":\n        \"Read this arXiv paper and decide if the authors are relevant candidates for my role.\\n\\n\" +\n        \"ROLE I AM HIRING FOR:\\n\" +\n        \"Senior ML Engineer. Must have: PyTorch or JAX, LLM training or fine-tuning, distributed systems knowledge\\n\\n\" +\n        \"PAPER:\\n\" +\n        \"Title: \" + ($json.title || \"\") + \"\\n\" +\n        \"Abstract: \" + ($json.contentSnippet || \"\") + \"\\n\" +\n        \"Authors: \" + ($json.creator || \"\") + \"\\n\" +\n        \"Published: \" + ($json.pubDate || \"\") + \"\\n\" +\n        \"URL: \" + ($json.link || \"\") + \"\\n\\n\" +\n        \"Return this exact JSON:\\n\" +\n        \"{\\n\" +\n        \"  \\\"relevant\\\": true or false,\\n\" +\n        \"  \\\"relevance_score\\\": 0-10,\\n\" +\n        \"  \\\"reason\\\": \\\"one sentence\\\",\\n\" +\n        \"  \\\"first_author_name\\\": \\\"first author full name\\\",\\n\" +\n        \"  \\\"all_authors\\\": [\\\"name1\\\", \\\"name2\\\"],\\n\" +\n        \"  \\\"what_they_built\\\": \\\"one sentence on what they built or proved\\\",\\n\" +\n        \"  \\\"outreach_hook\\\": \\\"one sentence cold email opener referencing this paper\\\",\\n\" +\n        \"  \\\"paper_url\\\": \\\"\" + ($json.link || \"\") + \"\\\"\\n\" +\n        \"}\"\n    }\n  ]\n}\n}}"
+      }
+    },
+    {
+      "id": "7e0a5d2f-775c-4b32-abb8-a8acbbca9ca3",
+      "name": "Parse Relevance",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [672, 0],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const raw = $json.content[0].text;\nconst cleaned = raw.replace(/```json|```/g, '').trim();\nconst result = JSON.parse(cleaned);\nreturn { json: result };"
+      }
+    },
+    {
+      "id": "f53b6fb2-30fe-42ee-aa00-c3c8190f8cd1",
+      "name": "Is it Relevant?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [896, 0],
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "relevant",
+              "leftValue": "={{ $json.relevant }}",
+              "rightValue": "",
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "97660877-3d23-45ff-938c-2ff5ad049cb9",
+      "name": "Find Author on GitHub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [1120, 0],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.github.com/search/users?q={{ encodeURIComponent($json.first_author_name) }}&type=users&per_page=3",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [{ "name": "Accept", "value": "application/vnd.github+json" }]
+        }
+      }
+    },
+    {
+      "id": "c714936e-51fd-4ae7-b1b7-f6e2a351cbc3",
+      "name": "Build Candidate Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1344, 0],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const gh = $json;\nconst items = Array.isArray(gh.items) ? gh.items : [];\nconst match = items.length ? items[0] : null;\nconst claude = $('Parse Relevance').item.json;\nconst paper = $('arXiv cs.LG Feed').item.json;\nreturn { json: {\n  full_name: claude.first_author_name || '',\n  github_url: match ? match.html_url : '',\n  github_login: match ? match.login : '',\n  fit_score: (claude.relevance_score != null ? claude.relevance_score : ''),\n  what_they_built: claude.what_they_built || '',\n  reason: claude.reason || '',\n  outreach_hook: claude.outreach_hook || '',\n  paper_url: claude.paper_url || paper.link || '',\n  paper_title: paper.title || ''\n}};"
+      }
+    },
+    {
+      "id": "997c1340-24af-4dc2-b65a-eb0c08de1b8f",
+      "name": "Save to Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [1568, 0],
+      "parameters": {
+        "resource": "record",
+        "operation": "create",
+        "base": { "__rl": true, "mode": "id", "value": "YOUR_AIRTABLE_BASE_ID" },
+        "table": { "__rl": true, "mode": "id", "value": "YOUR_AIRTABLE_TABLE_ID" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "full_name": "={{ $json.full_name }}",
+            "github_url": "={{ $json.github_url }}",
+            "source": "arXiv",
+            "date_sourced": "={{ $now.toISO() }}",
+            "fit_score": "={{ $json.fit_score }}",
+            "key_strengths": "={{ $json.what_they_built }}",
+            "key_gaps": "={{ $json.reason }}",
+            "outreach_hook": "={{ $json.outreach_hook }}",
+            "profile_summary": "=Paper: {{ $json.paper_title }} — {{ $json.paper_url }}"
+          }
+        },
+        "options": { "typecast": true }
+      }
+    }
+  ],
+  "connections": {
+    "arXiv cs.LG Feed": { "main": [[{ "node": "Limit to 2 (Test)", "type": "main", "index": 0 }]] },
+    "Limit to 2 (Test)": { "main": [[{ "node": "Claude Relevance Check", "type": "main", "index": 0 }]] },
+    "Claude Relevance Check": { "main": [[{ "node": "Parse Relevance", "type": "main", "index": 0 }]] },
+    "Parse Relevance": { "main": [[{ "node": "Is it Relevant?", "type": "main", "index": 0 }]] },
+    "Is it Relevant?": { "main": [[{ "node": "Find Author on GitHub", "type": "main", "index": 0 }]] },
+    "Find Author on GitHub": { "main": [[{ "node": "Build Candidate Record", "type": "main", "index": 0 }]] },
+    "Build Candidate Record": { "main": [[{ "node": "Save to Airtable", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}
