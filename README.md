@@ -1,7 +1,6 @@
 # arXiv Talent Radar n8n + Claude + GitHub + Airtable
 
-## Workflow Diagram
-![arXiv Talent Radar Workflow](workflow/YOUR_IMAGE_FILENAME.png)
+![arXiv Talent Radar Workflow](arXiv%20n8n%20Talent%20Radar.png)
 
 ## What this project does, read this first
 
