@@ -1,5 +1,8 @@
 # arXiv Talent Radar n8n + Claude + GitHub + Airtable
 
+## Workflow Diagram
+![arXiv Talent Radar Workflow](workflow/YOUR_IMAGE_FILENAME.png)
+
 ## What this project does, read this first
 
 This project builds an automated technical-sourcing system that runs every morning. It reads the daily [arXiv cs.LG](http://arxiv.org/rss/cs.LG) research feed, uses **Claude** to decide whether each paper's authors are a fit for a role you're hiring for, looks up the first author on **GitHub**, and saves qualified candidates into **Airtable**, each with a fit score and a personalized outreach line.
