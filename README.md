@@ -121,13 +121,6 @@ Delete the **Limit to 2 (Test)** node (or raise `maxItems`) so full runs process
 - Add deduplication logic to avoid repeated authors.
 - Use status fields in Airtable to track outreach progress.
 
-## Roadmap
-
-- Deduplicate authors already in Airtable before creating rows.
-- Query multiple arXiv categories in one run.
-- Add weighted scoring by role requirement.
-- Add Slack or email alerts for high-match candidates.
-
 ## License
 
 MIT.
