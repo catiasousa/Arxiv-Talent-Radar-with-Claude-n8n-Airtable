@@ -8,9 +8,22 @@ This project builds an automated technical-sourcing system that runs every morni
 
 After setup, the process is hands-off. Each morning, Airtable is pre-filled with fresh, relevance-ranked candidates ready for outreach.
 
-## Why this exists
+## Why arXiv
 
 Great engineers publish. New ML papers appear on arXiv every day, but manually reading them, judging author fit, and tracking down profiles is slow and inconsistent. This workflow turns that into a repeatable system: consistent screening criteria, structured AI evaluation, and clean candidate tracking.
+
+## Who this is for (and not for)
+
+### This is for you if
+You recruit machine learning and research engineering talent and want to discover people based on real technical output, not only profile keywords
+You want a repeatable weekly pipeline that identifies authors from relevant arXiv papers and prioritizes who to contact first
+You want AI assisted scoring and outreach hooks grounded in publication recency, topic relevance, and technical depth
+You are comfortable running API based automations in n8n and reviewing candidate records in Airtable
+
+### This is not for you if
+You only recruit non technical roles where publication signals are low value
+You need a fully no code sourcing tool with no API setup
+You cannot use external AI APIs due to internal compliance or policy constraints
 
 ## 4 accounts you need to create
 
