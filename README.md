@@ -2,7 +2,7 @@
 
 ![arXiv Talent Radar Workflow](arXiv%20n8n%20Talent%20Radar.png)
 
-## What this project does, read this first
+## What this project does
 
 This project builds an automated technical-sourcing system that runs every morning. It reads the daily [arXiv cs.LG](http://arxiv.org/rss/cs.LG) research feed, uses **Claude** to decide whether each paper's authors are a fit for a role you're hiring for, looks up the first author on **GitHub**, and saves qualified candidates into **Airtable**, each with a fit score and a personalized outreach line.
 
@@ -15,15 +15,14 @@ Great engineers publish. New ML papers appear on arXiv every day, but manually r
 ## Who this is for (and not for)
 
 ### This is for you if
-You recruit machine learning and research engineering talent and want to discover people based on real technical output, not only profile keywords
-You want a repeatable weekly pipeline that identifies authors from relevant arXiv papers and prioritizes who to contact first
-You want AI assisted scoring and outreach hooks grounded in publication recency, topic relevance, and technical depth
-You are comfortable running API based automations in n8n and reviewing candidate records in Airtable
+- You recruit machine learning and research engineering talent and want to discover people based on real technical output, not only profile keywords
+- You want a repeatable weekly pipeline that identifies authors from relevant arXiv papers and prioritizes who to contact first
+- You want AI assisted scoring and outreach hooks grounded in publication recency, topic relevance, and technical depth
 
 ### This is not for you if
-You only recruit non technical roles where publication signals are low value
-You need a fully no code sourcing tool with no API setup
-You cannot use external AI APIs due to internal compliance or policy constraints
+- You only recruit non technical roles where publication signals are low value
+- You need a fully no code sourcing tool with no API setup
+- You cannot use external AI APIs due to internal compliance or policy constraints
 
 ## 4 accounts you need to create
 
