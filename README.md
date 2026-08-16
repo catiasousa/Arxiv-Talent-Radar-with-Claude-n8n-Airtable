@@ -12,6 +12,18 @@ After setup, the process is hands-off. Each morning, Airtable is pre-filled with
 
 Great engineers publish. New ML papers appear on arXiv every day, but manually reading them, judging author fit, and tracking down profiles is slow and inconsistent. This workflow turns that into a repeatable system: consistent screening criteria, structured AI evaluation, and clean candidate tracking.
 
+## Workflow logic explained
+
+This workflow runs on a weekly schedule and executes the same sourcing pipeline every cycle.
+
+It starts by querying arXiv with multiple search strategies to capture different candidate signals, then combines and de-duplicates authors so each person is processed once.
+
+Each author is enriched with profile context and publication evidence, then passed to Claude for structured scoring across fit, strength areas, gaps, and recommended next action.
+
+Only candidates that pass your quality threshold are written to Airtable with sourcing metadata and outreach-ready context.
+
+The result is a repeatable system that turns raw research activity into a prioritized, recruiter-usable shortlist.
+
 ## Who this is for (and not for)
 
 ### This is for you if
