@@ -35,7 +35,6 @@ The result is a repeatable system that turns raw research activity into a priori
 
 ### This is not for you if
 - You only recruit non-technical roles where publication signals are low value.
-- You need a fully no-code sourcing tool with no API setup.
 - You cannot use external AI APIs due to internal compliance or policy constraints.
 
 ## The search engines this workflow runs
@@ -61,6 +60,8 @@ Why it matters: Applies consistent screening criteria at scale.
 Finds the first author on GitHub and adds profile context.
 
 Why it matters: Adds practical engineering signals and outreach context.
+
+Note: See how customize the searches for your role below. 
 
 ## Accounts you need to create
 
@@ -187,11 +188,6 @@ Gitleaks runs via `.github/workflows/gitleaks.yml`. Run locally before push:
 
 `gitleaks detect --config .gitleaks.toml --source . --no-git -v`
 
-## Operating notes
-
-- Tune role prompt and filters weekly to improve candidate quality.
-- Add deduplication logic to avoid repeated authors.
-- Use status fields in Airtable to track outreach progress.
 
 ## License
 
