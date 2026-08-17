@@ -93,7 +93,7 @@ Note: See how customize the searches for your role below.
 3. Paste the full prompt from [`PROMPT.md`](PROMPT.md).
 4. Connect credentials, test, and activate.
 
-`PROMPT.md` describes every node so Claude / the n8n AI Assistant can reconstruct the workflow from scratch, handy if you want to understand or customize each step.
+`PROMPT.md` describes every node so Claude / the n8n AI Assistant can reconstruct the workflow from scratch — handy if you want to understand or customize each step.
 
 ## How the workflow operates
 
@@ -107,6 +107,8 @@ Note: See how customize the searches for your role below.
 
 ## Airtable fields required by this workflow
 
+Fields the workflow **writes**:
+
 - full_name
 - github_url
 - source
@@ -116,6 +118,14 @@ Note: See how customize the searches for your role below.
 - key_gaps
 - outreach_hook
 - profile_summary
+- paper_title
+- paper_url
+- institution
+- author_position
+- career_stage
+- arxiv_category
+- relevance_score
+- co_authors
 
 Optional **manual tracking** columns (not filled by the workflow — add them if you want to track outreach in Airtable):
 
