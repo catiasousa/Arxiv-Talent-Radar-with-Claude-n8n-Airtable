@@ -116,6 +116,12 @@ Why it matters: Adds practical engineering signals and outreach context.
 - outreach_hook
 - profile_summary
 
+Optional **manual tracking** columns (not filled by the workflow — add them if you want to track outreach in Airtable):
+
+- current_company
+- contacted
+- replied
+  
 ## Setup details
 
 ### 1) Import workflow
